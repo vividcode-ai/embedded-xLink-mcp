@@ -1,0 +1,13 @@
+{
+  "name": "@vividcodeai/embedded-xlink-win32-x64",
+  "version": "0.1.0",
+  "os": ["win32"],
+  "cpu": ["x64"],
+  "files": ["bin/"],
+  "description": "Prebuilt binary for Windows x64 - embedded-xlink-mcp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vividcode-ai/embedded-xLink-mcp.git"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@vividcodeai/embedded-xlink-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for embedded debugging (ARM Cortex-M, RISC-V) via probe-rs",
+  "bin": {
+    "embedded-xlink-mcp": "bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vividcode-ai/embedded-xLink-mcp.git"
+  },
+  "keywords": ["mcp", "debugging", "embedded", "probe-rs", "rtt", "cortex-m", "riscv"],
+  "license": "MIT",
+  "optionalDependencies": {
+    "@vividcodeai/embedded-xlink-darwin-x64": "0.1.0",
+    "@vividcodeai/embedded-xlink-darwin-arm64": "0.1.0",
+    "@vividcodeai/embedded-xlink-linux-x64": "0.1.0",
+    "@vividcodeai/embedded-xlink-linux-arm64": "0.1.0",
+    "@vividcodeai/embedded-xlink-win32-x64": "0.1.0"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

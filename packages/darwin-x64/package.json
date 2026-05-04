@@ -1,0 +1,16 @@
+{
+  "name": "@vividcodeai/embedded-xlink-darwin-x64",
+  "version": "0.1.0",
+  "os": ["darwin"],
+  "cpu": ["x64"],
+  "files": ["bin/"],
+  "description": "Prebuilt binary for macOS x86_64 - embedded-xlink-mcp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vividcode-ai/embedded-xLink-mcp.git"
+  },
+  "scripts": {
+    "postinstall": "node postinstall.js"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "embedded-xlink-mcp-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build:packages": "node scripts/build-packages.js",
+    "publish": "node scripts/publish.js"
+  }
+}
