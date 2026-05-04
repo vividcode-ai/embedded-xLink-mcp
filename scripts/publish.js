@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const { join } = require('fs').realpathSync;
+const { join } = require('path');
 
 const packages = [
   'darwin-x64',

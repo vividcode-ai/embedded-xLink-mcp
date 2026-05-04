@@ -3,7 +3,7 @@ const { join } = require('path');
 
 const newVersion = process.argv[2];
 if (!newVersion || !/^\d+\.\d+\.\d+/.test(newVersion)) {
-  console.error('Usage: node scripts/set-version.js <semver>');
+  console.error('Usage: node scripts/set-version.js 0.0.1');
   process.exit(1);
 }
 
