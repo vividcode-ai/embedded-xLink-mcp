@@ -50,15 +50,17 @@ jobs:
       - name: Install cross-compilation dependencies (Linux ARM64)
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
-          sudo dpkg --add-architecture arm64
-          sudo apt-get update
-          sudo apt-get install -y \
-            gcc-aarch64-linux-gnu \
-            libudev-dev:arm64 \
-            libusb-1.0-0-dev:arm64
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+          sudo mkdir -p /usr/aarch64-linux-gnu
+          pkg_udev=$(curl -sL http://ports.ubuntu.com/ubuntu-ports/pool/main/s/systemd/ | grep -oP 'libudev-dev_\d[\w.~]+_arm64\.deb' | sort -V | tail -1)
+          curl -sL "http://ports.ubuntu.com/ubuntu-ports/pool/main/s/systemd/$pkg_udev" -o /tmp/libudev-dev_arm64.deb
+          sudo dpkg -x /tmp/libudev-dev_arm64.deb /usr/aarch64-linux-gnu
+          pkg_usb=$(curl -sL http://ports.ubuntu.com/ubuntu-ports/pool/main/libu/libusb-1.0/ | grep -oP 'libusb-1.0-0-dev_\d[\w.~]+_arm64\.deb' | sort -V | tail -1)
+          curl -sL "http://ports.ubuntu.com/ubuntu-ports/pool/main/libu/libusb-1.0/$pkg_usb" -o /tmp/libusb-dev_arm64.deb
+          sudo dpkg -x /tmp/libusb-dev_arm64.deb /usr/aarch64-linux-gnu
           echo "PKG_CONFIG_ALLOW_CROSS=1" >> $GITHUB_ENV
-          echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig" >> $GITHUB_ENV
-          echo "PKG_CONFIG_SYSROOT_DIR=/" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=/usr/aarch64-linux-gnu/usr/lib/aarch64-linux-gnu/pkgconfig" >> $GITHUB_ENV
+          echo "PKG_CONFIG_SYSROOT_DIR=/usr/aarch64-linux-gnu" >> $GITHUB_ENV
           echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
 
       - name: Build release
