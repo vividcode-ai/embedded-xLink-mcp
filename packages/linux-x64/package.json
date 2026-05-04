@@ -1,9 +1,15 @@
 {
   "name": "@vividcodeai/embedded-xlink-linux-x64",
-  "version": "0.1.0",
-  "os": ["linux"],
-  "cpu": ["x64"],
-  "files": ["bin/"],
+  "version": "0.2.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "files": [
+    "bin/"
+  ],
   "description": "Prebuilt binary for Linux x86_64 - embedded-xlink-mcp",
   "license": "MIT",
   "repository": {
