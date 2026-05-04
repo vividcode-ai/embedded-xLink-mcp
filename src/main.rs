@@ -118,7 +118,7 @@ mod tests {
 
     #[test]
     fn test_args_parsing() {
-        let args = Args::parse_from(&[
+        let args = Args::parse_from([
             "embedded-xLink-mcp",
             "--log-level", "debug",
             "--max-sessions", "10",

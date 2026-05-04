@@ -4,6 +4,16 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      publish_npm:
+        description: 'Publish to npm'
+        type: boolean
+        default: true
+      create_release:
+        description: 'Create GitHub Release'
+        type: boolean
+        default: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -89,6 +99,7 @@ jobs:
   publish-npm:
     name: Publish to npm
     needs: build
+    if: github.event_name == 'push' || github.event.inputs.publish_npm == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -136,6 +147,7 @@ jobs:
   create-release:
     name: Create GitHub Release
     needs: build
+    if: github.event_name == 'push' || github.event.inputs.create_release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write

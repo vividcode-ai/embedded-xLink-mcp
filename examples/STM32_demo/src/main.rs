@@ -93,7 +93,7 @@ async fn process_commands(
             // Parse configuration commands
             if config_str.starts_with("SPEED:") {
                 if let Ok(speed) = config_str[6..].parse::<u32>() {
-                    if speed >= 1 && speed <= 10 {
+                    if (1..=10).contains(&speed) {
                         unsafe { SPEED_MULTIPLIER = speed; }
                         writeln!(up_channels.0, "Speed configured to: {}x", speed).ok();
                     } else {
@@ -213,7 +213,7 @@ async fn main(_spawner: Spawner) {
             
             // Milestone reporting
             let current_index = unsafe { FIB_INDEX };
-            if current_index > 0 && current_index % 10 == 0 {
+            if current_index > 0 && current_index.is_multiple_of(10) {
                 writeln!(channels.up.0, "Milestone: {} Fibonacci numbers calculated", current_index).ok();
             }
             

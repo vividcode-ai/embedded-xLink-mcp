@@ -67,7 +67,7 @@ fn is_valid_rtt_address(address: u64) -> bool {
     const RAM_START: u64 = 0x20000000;
     const RAM_END: u64 = 0x2FFFFFFF;
     
-    address >= RAM_START && address <= RAM_END
+    (RAM_START..=RAM_END).contains(&address)
 }
 
 /// Get comprehensive ELF information for debugging

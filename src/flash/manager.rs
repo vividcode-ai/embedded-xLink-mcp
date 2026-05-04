@@ -90,7 +90,7 @@ impl FlashManager {
                 
                 // Calculate sector range - this is target-specific, using approximation
                 let sector_size = 4096; // Common sector size, should be target-specific
-                let sector_count = (size + sector_size - 1) / sector_size;
+                let sector_count = size.div_ceil(sector_size);
                 
                 // Use probe-rs flashing API for sector erase
                 let mut core = session.core(0)

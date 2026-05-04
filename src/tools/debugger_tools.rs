@@ -633,7 +633,7 @@ impl EmbeddedDebuggerToolHandler {
                 }
             };
             
-            let mut data = vec![0u8; args.size as usize];
+            let mut data = vec![0u8; args.size];
             match core.read(address, &mut data) {
                 Ok(_) => {
                     debug!("Read {} bytes from address 0x{:08X}", data.len(), address);
@@ -1073,7 +1073,7 @@ impl EmbeddedDebuggerToolHandler {
             "binary" => {
                 // Parse binary string like "10110011 11001100"
                 let binary_str = args.data.replace(' ', "");
-                if binary_str.len() % 8 != 0 {
+                if !binary_str.len().is_multiple_of(8) {
                     let error_msg = format!("❌ Binary data must be multiple of 8 bits: '{}'", args.data);
                     return Err(McpError::internal_error(error_msg, None));
                 }
@@ -1681,7 +1681,7 @@ fn parse_data(data_str: &str, format: &str) -> Result<Vec<u8>, String> {
         "hex" => {
             // Remove spaces and 0x prefixes
             let clean_str = data_str.replace(" ", "").replace("0x", "").replace("0X", "");
-            if clean_str.len() % 2 != 0 {
+            if !clean_str.len().is_multiple_of(2) {
                 return Err("Hex data must have even number of characters".to_string());
             }
             
