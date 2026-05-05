@@ -61,21 +61,29 @@ jobs:
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo dpkg --add-architecture arm64
-          # Restrict ALL default repos to amd64 to avoid 404 on arm64
+
+          # Dynamically detect Ubuntu codename (e.g., noble) for Ports repo URL
+          CODENAME=$(lsb_release -cs 2>/dev/null || echo "noble")
+
+          # Only restrict Ubuntu-owned sources to amd64; skip third-party repos
+          # (Microsoft, GitHub CLI, etc.) whose format would be corrupted by sed
           for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list; do
             [ -f "$f" ] || continue
             if [[ "$f" == *.sources ]]; then
-              sudo sed -i '/^Types: deb$/a\Architectures: amd64' "$f"
+              grep -q "^URIs:.*ubuntu" "$f" && sudo sed -i '/^Types: deb$/a\Architectures: amd64' "$f" || true
             else
-              sudo sed -i 's/^deb /deb [arch=amd64] /' "$f"
+              grep -q "^deb http.*ubuntu" "$f" && sudo sed -i 's/^deb /deb [arch=amd64] /' "$f" || true
             fi
           done
-          sudo tee /etc/apt/sources.list.d/arm64.list >/dev/null <<'EOF'
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble main restricted universe multiverse
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble-updates main restricted universe multiverse
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble-security main restricted universe multiverse
-          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble-backports main restricted universe multiverse
+
+          # Add Ubuntu Ports repository for arm64 (uses detected codename)
+          sudo tee /etc/apt/sources.list.d/arm64.list >/dev/null <<EOF
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${CODENAME} main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${CODENAME}-updates main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${CODENAME}-security main restricted universe multiverse
+          deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${CODENAME}-backports main restricted universe multiverse
           EOF
+
           sudo apt-get update
           sudo apt-get install -y \
             gcc-aarch64-linux-gnu \
