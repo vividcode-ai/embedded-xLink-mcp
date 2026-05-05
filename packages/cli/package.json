@@ -1,6 +1,6 @@
 {
   "name": "@vividcodeai/embedded-xlink-mcp",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "MCP server for embedded debugging (ARM Cortex-M, RISC-V) via probe-rs",
   "bin": {
     "embedded-xlink-mcp": "bin/cli.js"
@@ -20,11 +20,11 @@
   ],
   "license": "MIT",
   "optionalDependencies": {
-    "@vividcodeai/embedded-xlink-darwin-x64": "0.2.3",
-    "@vividcodeai/embedded-xlink-darwin-arm64": "0.2.3",
-    "@vividcodeai/embedded-xlink-linux-x64": "0.2.3",
-    "@vividcodeai/embedded-xlink-linux-arm64": "0.2.3",
-    "@vividcodeai/embedded-xlink-win32-x64": "0.2.3"
+    "@vividcodeai/embedded-xlink-darwin-x64": "0.2.4",
+    "@vividcodeai/embedded-xlink-darwin-arm64": "0.2.4",
+    "@vividcodeai/embedded-xlink-linux-x64": "0.2.4",
+    "@vividcodeai/embedded-xlink-linux-arm64": "0.2.4",
+    "@vividcodeai/embedded-xlink-win32-x64": "0.2.4"
   },
   "engines": {
     "node": ">=16"
