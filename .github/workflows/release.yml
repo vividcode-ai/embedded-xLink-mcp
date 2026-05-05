@@ -61,11 +61,15 @@ jobs:
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo dpkg --add-architecture arm64
-          # Restrict default repos to amd64 to avoid 404 on arm64 from security.ubuntu.com
-          if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
-            sudo sed -i '/^Types: deb$/a\Architectures: amd64' /etc/apt/sources.list.d/ubuntu.sources
-          fi
-          sudo sed -i 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list 2>/dev/null || true
+          # Restrict ALL default repos to amd64 to avoid 404 on arm64
+          for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list; do
+            [ -f "$f" ] || continue
+            if [[ "$f" == *.sources ]]; then
+              sudo sed -i '/^Types: deb$/a\Architectures: amd64' "$f"
+            else
+              sudo sed -i 's/^deb /deb [arch=amd64] /' "$f"
+            fi
+          done
           sudo tee /etc/apt/sources.list.d/arm64.list >/dev/null <<'EOF'
           deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble main restricted universe multiverse
           deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports noble-updates main restricted universe multiverse
