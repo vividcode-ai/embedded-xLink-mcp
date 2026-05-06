@@ -2,8 +2,7 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
   workflow_dispatch:
     inputs:
       publish_npm:
@@ -20,8 +19,37 @@ env:
   RUST_BACKTRACE: 1
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from cli/package.json
+        id: version
+        run: echo "version=$(node -p "require('./packages/cli/package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, skipping"
+          else
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git tag "$TAG"
+            git push origin "$TAG"
+            echo "Created and pushed tag $TAG"
+          fi
+
   build:
     name: Build ${{ matrix.npm_platform }}
+    needs: setup
     strategy:
       fail-fast: false
       matrix:
@@ -116,9 +144,11 @@ jobs:
 
   publish-npm:
     name: Publish to npm
-    needs: build
+    needs: [setup, build]
     if: github.event_name == 'push' || github.event.inputs.publish_npm == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -127,44 +157,43 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
-      - name: Download all platform binaries
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           pattern: binary-*
           path: artifacts
-          merge-multiple: true
 
       - name: Organize binaries into package directories
         shell: bash
         run: |
-          for artifact_dir in artifacts/*/; do
-            platform_name=$(basename "$artifact_dir")
-            if [ -d "$artifact_dir" ]; then
-              mkdir -p "packages/$platform_name/bin"
-              cp "$artifact_dir"/* "packages/$platform_name/bin/"
-            fi
+          for artifact_dir in artifacts/binary-*/; do
+            [ -d "$artifact_dir" ] || continue
+            artifact_name=$(basename "$artifact_dir")
+            platform="${artifact_name#binary-}"
+            mkdir -p "packages/$platform/bin"
+            cp "$artifact_dir"/bin/* "packages/$platform/bin/"
           done
 
       - name: Publish platform packages
         shell: bash
         run: |
           for pkg in darwin-x64 darwin-arm64 linux-x64 linux-arm64 win32-x64; do
-            echo "--- Publishing @vividcodeai/embedded-xlink-$pkg ---"
             cd packages/$pkg
-            npm publish --access public || echo "Package $pkg may already exist"
+            npm publish --access public --provenance 2>/dev/null || npm publish --access public
             cd ../..
           done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish CLI package
         run: |
           cd packages/cli
-          npm publish --access public
+          npm publish --access public --provenance 2>/dev/null || npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   create-release:
     name: Create GitHub Release
-    needs: build
+    needs: [setup, build]
     if: github.event_name == 'push' || github.event.inputs.create_release == 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -176,20 +205,22 @@ jobs:
         with:
           pattern: binary-*
           path: release-artifacts
-          merge-multiple: true
 
       - name: Rename binaries for release
         shell: bash
         run: |
           mkdir -p release-files
-          for f in release-artifacts/*/bin/* release-artifacts/bin/*; do
-            [ -f "$f" ] || continue
-            dir_name=$(basename "$(dirname "$(dirname "$f")")" 2>/dev/null || echo "unknown")
+          for artifact_dir in release-artifacts/binary-*/; do
+            [ -d "$artifact_dir" ] || continue
+            artifact_name=$(basename "$artifact_dir")
+            platform="${artifact_name#binary-}"
+            bin_file=$(find "$artifact_dir" -type f -name "embedded-xLink-mcp*" 2>/dev/null | head -1)
+            [ -f "$bin_file" ] || continue
             ext=""
-            case "$f" in
+            case "$bin_file" in
               *.exe) ext=".exe" ;;
             esac
-            cp "$f" "release-files/embedded-xLink-mcp-$dir_name$ext"
+            cp "$bin_file" "release-files/embedded-xLink-mcp-$platform$ext"
           done
 
       - name: Create Release
