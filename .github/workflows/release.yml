@@ -173,6 +173,15 @@ jobs:
             cp "$artifact_dir"* "packages/$platform/bin/"
           done
 
+      - name: Sync platform package versions
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          for pkg in darwin-x64 darwin-arm64 linux-x64 linux-arm64 win32-x64; do
+            json="./packages/$pkg/package.json"
+            node -e "const p=require('$json'); p.version='$VERSION'; require('fs').writeFileSync('$json', JSON.stringify(p, null, 2)+'\n')"
+            echo "Synced $pkg → $VERSION"
+          done
+
       - name: Publish platform packages
         shell: bash
         run: |
