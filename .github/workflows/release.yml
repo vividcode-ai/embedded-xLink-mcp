@@ -170,7 +170,7 @@ jobs:
             artifact_name=$(basename "$artifact_dir")
             platform="${artifact_name#binary-}"
             mkdir -p "packages/$platform/bin"
-            cp "$artifact_dir"/bin/* "packages/$platform/bin/"
+            cp "$artifact_dir"* "packages/$platform/bin/"
           done
 
       - name: Publish platform packages
@@ -214,7 +214,7 @@ jobs:
             [ -d "$artifact_dir" ] || continue
             artifact_name=$(basename "$artifact_dir")
             platform="${artifact_name#binary-}"
-            bin_file=$(find "$artifact_dir" -type f -name "embedded-xLink-mcp*" 2>/dev/null | head -1)
+            bin_file=$(find "$artifact_dir" -maxdepth 1 -type f -name "embedded-xLink-mcp*" 2>/dev/null | head -1)
             [ -f "$bin_file" ] || continue
             ext=""
             case "$bin_file" in
