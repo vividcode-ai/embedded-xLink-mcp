@@ -181,6 +181,16 @@ jobs:
             node -e "const p=require('$json'); p.version='$VERSION'; require('fs').writeFileSync('$json', JSON.stringify(p, null, 2)+'\n')"
             echo "Synced $pkg → $VERSION"
           done
+          node -e "
+            const p = require('./packages/cli/package.json');
+            if (p.optionalDependencies) {
+              for (const key of Object.keys(p.optionalDependencies)) {
+                p.optionalDependencies[key] = '$VERSION';
+              }
+            }
+            require('fs').writeFileSync('./packages/cli/package.json', JSON.stringify(p, null, 2) + '\n');
+          "
+          echo "Synced cli optionalDependencies → $VERSION"
 
       - name: Publish platform packages
         shell: bash
