@@ -8,7 +8,9 @@
     "x64"
   ],
   "files": [
-    "bin/"
+    "bin/",
+    "README.md",
+    "README.zh.md"
   ],
   "description": "Prebuilt binary for Windows x64 - embedded-xlink-mcp",
   "license": "MIT",
