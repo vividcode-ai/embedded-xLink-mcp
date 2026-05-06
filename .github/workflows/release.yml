@@ -23,6 +23,7 @@ jobs:
   build:
     name: Build ${{ matrix.npm_platform }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -72,7 +73,7 @@ jobs:
             if [[ "$f" == *.sources ]]; then
               grep -q "^URIs:.*ubuntu" "$f" && sudo sed -i '/^Types: deb$/a\Architectures: amd64' "$f" || true
             else
-              grep -q "^deb http.*ubuntu" "$f" && sudo sed -i 's/^deb /deb [arch=amd64] /' "$f" || true
+              grep -qE "^deb https?://.*ubuntu" "$f" && sudo sed -i 's/^deb /deb [arch=amd64] /' "$f" || true
             fi
           done
 
@@ -84,7 +85,7 @@ jobs:
           deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports ${CODENAME}-backports main restricted universe multiverse
           EOF
 
-          sudo apt-get update
+          sudo apt-get update || true
           sudo apt-get install -y \
             gcc-aarch64-linux-gnu \
             libudev-dev:arm64 \
