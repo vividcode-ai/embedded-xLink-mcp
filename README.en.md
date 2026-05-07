@@ -217,6 +217,113 @@ All tools tested and validated with real STM32 hardware:
 - **RISC-V**: Various RISC-V cores
 - **ARM Cortex-A**: Basic support
 
+### Supported Target Chips
+
+Built on **probe-rs v0.25**, featuring **581 flash algorithms** across **~3,843 chip models**:
+
+#### STMicroelectronics — 23 Series
+| Series | Algorithms | Variants | Examples |
+|--------|:----------:|:--------:|----------|
+| STM32C0 | 2 | 25 | STM32C011xx |
+| STM32F0 | 3 | 76 | STM32F051xx |
+| STM32F1 | 4 | 99 | STM32F103C8Tx |
+| STM32F2 | 3 | 41 | STM32F207xx |
+| STM32F3 | 3 | 72 | STM32F303xx |
+| STM32F4 | 9 | 158 | STM32F407VGTx, STM32F429ZITx |
+| STM32F7 | 22 | 110 | STM32F767xx |
+| STM32G0 | 6 | 106 | STM32G031xx |
+| STM32G4 | 4 | 97 | STM32G431CBTx (validation target) |
+| STM32H5 | 4 | 49 | STM32H503xx |
+| STM32H7 | 14 | 143 | STM32H743ZITx, STM32H750xx |
+| STM32H7RS | 4 | 24 | STM32H7Rxx |
+| STM32L0 | 9 | 108 | STM32L053xx |
+| STM32L1 | 8 | 112 | STM32L151xx |
+| STM32L4 | 18 | 159 | STM32L476RGTx |
+| STM32L5 | 6 | 23 | STM32L552xx |
+| STM32U0 | 2 | 34 | STM32U031xx |
+| STM32U5 | 9 | 86 | STM32U585AIIx |
+| STM32WB | 4 | 22 | STM32WB55CGUx |
+| STM32WBA | 2 | 18 | STM32WBA52xx |
+| STM32WL | 3 | 20 | STM32WL55xx |
+| CC13xx/CC26xx(TI) | 3 | 15 | CC1310F128, CC2652R7F3 |
+
+#### NXP — 22 Series
+| Series | Algorithms | Variants | Examples |
+|--------|:----------:|:--------:|----------|
+| LPC800 | 8 | 37 | LPC845 |
+| LPC54102 | 2 | 6 | LPC54102 |
+| LPC546xx | 4 | 28 | LPC54606 |
+| LPC5526/5528 | 2 | 8 | LPC5526 |
+| LPC55S16/S26/S28/S66/S69 | 8 | 23 | LPC55S69JBD100 |
+| LM3S(Stellaris) | 4 | 223 | LM3S9B96 |
+| i.MX RT1010 | 1 | 2 | MIMXRT1011 |
+| i.MX RT1020 | 1 | 2 | MIMXRT1021 |
+| i.MX RT1050 | 2 | 4 | MIMXRT1052 |
+| i.MX RT1060/1064 | 2 | 4 | MIMXRT1062 |
+| i.MX RT1170 | 1 | 2 | MIMXRT1176 |
+| i.MX RT1180 | 1 | 2 | - |
+| i.MX RT500 | 2 | 5 | MIMXRT595 |
+| i.MX RT685S | 4 | 7 | MIMXRT685 |
+
+#### Renesas RA — 27 Series
+| Series | Algorithms | Variants |
+|--------|:----------:|:--------:|
+| RA0E1 | 4 | 6 |
+| RA2A1/A2/E1/E2/E3/L1 | 24 | 37 |
+| RA4E1/E2/M1/M2/M3/T1/W1 | 29 | 42 |
+| RA6E1/E2/M1~M5/T1~T3 | 52 | 80 |
+| RA8D1/M1/T1 | 15 | 23 |
+
+#### Nordic Semiconductor — 5 Series
+| Series | Algorithms | Variants | Examples |
+|--------|:----------:|:--------:|----------|
+| nRF51 | 3 | 12 | nRF51822_xxAA |
+| nRF52 | 1 | 9 | nRF52832_xxAA, nRF52840_xxAA |
+| nRF53 | 4 | 5 | nRF5340_xxAA |
+| nRF54 | 1 | 2 | nRF54H20 |
+| nRF91 | 2 | 3 | nRF9160_xxAA |
+
+#### Silicon Labs — 25 Series
+| Series | Variants | Examples |
+|--------|:--------:|----------|
+| EFM32GG11B | 61 | EFM32GG11B |
+| EFM32HG | 21 | EFM32HG |
+| EFM32PG12B/PG1B/PG22 | 23 | EFM32PG22C200F512IM40 |
+| EFM32TG11B | 53 | EFM32TG11B |
+| EFR32BG12P/BG13P/BG14P/BG1P | 22 | EFR32BG12P |
+| EFR32BG21/BG22 | 17 | EFR32BG22C224F512IM40 |
+| EFR32FG12P~FG23(7 series) | 45 | EFR32FG23 |
+| EFR32MG12P~MG22(9 series) | 78 | EFR32MG12P433F1024GM68 |
+
+#### Microchip/Atmel SAM — 14 Series
+| Series | Algorithms | Variants | Examples |
+|--------|:----------:|:--------:|----------|
+| SAM3U/3X | 6 | 17 | ATSAM3X8E |
+| SAM4/D4 | 9 | 67 | ATSAM4S |
+| SAMD10/D11/D21/D51/DA1 | 12 | 75 | ATSAMD21G18A |
+| SAME51/53/54/70 | 5 | 39 | ATSAME70Q21B |
+| SAMV71 | 2 | 20 | ATSAMV71Q21B |
+
+#### Other Manufacturers
+| Manufacturer | Series | Variants | Examples |
+|-------------|:-----:|:--------:|----------|
+| **Artery** AT32 | 1 | 249 | AT32F403ACGUx |
+| **GigaDevice** GD32 | 6 (incl. RISC-V) | 191 | GD32F103C8Tx, GD32VF103 |
+| **Espressif** ESP32 | 8 | 16 | ESP32, ESP32-C3/S3/H2 |
+| **Texas Instruments** | 6 | 104 | TM4C123GH6PM, MSP432P401RI |
+| **Infineon** XMC4000 | 1 | 56 | XMC4500/4700/4800 |
+| **Holtek** HT32 | 19 | 244 | HT32F523xx |
+| **Fujitsu** FM3 | 1 | 106 | MB9BF Series |
+| **Raspberry Pi** | 1 | 3 | RP2040 |
+| **WCH** CH32 (RISC-V) | 2 | 5 | CH32V003, CH32V307 |
+| **Puya** PY32 | 1 | 31 | PY32F003/030 |
+| **Maxim** | 2 | 5 | MAX32660/65 |
+| **Nuvoton** MSPM0 | 3 | 31 | MSPM0G350x |
+| **Vorago** | 2 | 11 | VA108xx, VA416xx |
+| **Others** | ~10 | ~100 | ADuCM302x, W7500, PAC52xx, HF5032x, HC32F005, HK32F030xMxx, AIR001, SWM341, FE310(RISC-V) |
+
+> Chip support is based on probe-rs v0.25, including **180 target definition files, 3,843 chip models, and 581 flash algorithms**. Supports full ARM Cortex-M family and RISC-V architectures.
+
 ## 🏆 Production Status
 
 ### ✅ Fully Implemented and Tested
